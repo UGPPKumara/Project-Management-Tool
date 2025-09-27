@@ -1,8 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
-const Project = require('./Project');
-const User = require('./User');
 
+// The join table model itself is very simple now
 const ProjectMember = sequelize.define('ProjectMember', {
   id: {
     type: DataTypes.INTEGER,
@@ -10,8 +9,5 @@ const ProjectMember = sequelize.define('ProjectMember', {
     autoIncrement: true,
   },
 });
-
-Project.belongsToMany(User, { through: ProjectMember });
-User.belongsToMany(Project, { through: ProjectMember });
 
 module.exports = ProjectMember;

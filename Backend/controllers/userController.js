@@ -1,17 +1,19 @@
-const User = require('../models/User');
+const { User } = require('../models'); // Corrected import
 const bcrypt = require('bcryptjs');
 
-// Get all users (for admin)
+// Get all users (excluding passwords)
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: { exclude: ['password'] } });
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] },
+    });
     res.json(users);
   } catch (err) {
     res.status(500).send('Server error');
   }
 };
 
-// Create a new user (for admin)
+// Create a new user
 exports.createUser = async (req, res) => {
   const { username, password, role, name, email } = req.body;
   try {
@@ -22,7 +24,7 @@ exports.createUser = async (req, res) => {
     
     user = await User.findOne({ where: { email } });
     if (user) {
-        return res.status(400).json({ msg: 'Email already exists' });
+      return res.status(400).json({ msg: 'Email already exists' });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -48,7 +50,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Update a user (for admin)
+// Update a user's details
 exports.updateUser = async (req, res) => {
   const { username, role, name, email } = req.body;
   try {
@@ -70,7 +72,7 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// Delete a user (for admin)
+// Delete a user
 exports.deleteUser = async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);

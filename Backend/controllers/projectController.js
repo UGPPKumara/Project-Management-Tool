@@ -1,14 +1,13 @@
-const Project = require('../models/Project');
-const User = require('../models/User');
+const { Project, User } = require('../models'); // Corrected import
 
-// Get all projects (include assigned users)
+// Get all projects and their assigned members
 exports.getProjects = async (req, res) => {
   try {
     const projects = await Project.findAll({
       include: {
         model: User,
         attributes: ['id', 'username', 'name'],
-        through: { attributes: [] }, // Don't include the join table attributes
+        through: { attributes: [] }, // Hides the join table attributes
       },
     });
     res.json(projects);
@@ -17,7 +16,7 @@ exports.getProjects = async (req, res) => {
   }
 };
 
-// Create a new project (and assign members)
+// Create a new project and assign members
 exports.createProject = async (req, res) => {
   const { members, ...projectData } = req.body;
   try {
@@ -31,7 +30,7 @@ exports.createProject = async (req, res) => {
   }
 };
 
-// Update a project (and its members)
+// Update an existing project and its members
 exports.updateProject = async (req, res) => {
   const { members, ...projectData } = req.body;
   try {
@@ -49,7 +48,7 @@ exports.updateProject = async (req, res) => {
   }
 };
 
-// ... (deleteProject function remains the same)
+// Delete a project
 exports.deleteProject = async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.id);
