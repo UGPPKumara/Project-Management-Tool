@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import ProjectTable from './ProjectTable.jsx';
 import StatCard from './StatCard.jsx';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const API_URL = 'http://localhost:5000/api/projects';
 
@@ -12,7 +12,7 @@ const MemberDashboard = ({ onLogout, token }) => {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const decoded = jwt_decode(token);
+    const decoded = jwtDecode(token);
     setUserId(decoded.user.id);
   }, [token]);
 
